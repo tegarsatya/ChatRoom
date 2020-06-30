@@ -1982,6 +1982,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      message: '',
+      messages: []
+    };
+  },
+  props: {
+    user: Object
+  },
+  methods: {
+    sendMessage: function sendMessage() {
+      this.messages.push({
+        user: this.user,
+        message: this.message
+      });
+      axios.post('/send', {
+        message: this.message
+      }).then(function (result) {
+        console.log(result);
+      })["catch"](function (err) {
+        console.log(err);
+      });
+      this.message = '';
+    }
+  },
   mounted: function mounted() {
     Echo.join('chat').listen('ChatSent', function (e) {
       console.log(e);
@@ -43605,72 +43630,99 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c("div", { staticClass: "col-md-8" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [_vm._v("Chat Room")]),
+          _vm._v(" "),
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-footer" }, [
+            _c("div", { staticClass: "form-group" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.message,
+                    expression: "message"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.message },
+                on: {
+                  keyup: function($event) {
+                    if (
+                      !$event.type.indexOf("key") &&
+                      _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                    ) {
+                      return null
+                    }
+                    return _vm.sendMessage()
+                  },
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.message = $event.target.value
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("p", { staticClass: "text-muted" }, [
+              _vm._v("Username typing...")
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _vm._m(1)
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-md-8" }, [
-          _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-header" }, [_vm._v("Chat Room")]),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "card-body bg-secondary",
-                attrs: { id: "chat-box" }
-              },
-              [
-                _c("div", { staticClass: "median bg-light rounded" }, [
-                  _c("div", { staticClass: "media-body m-2" }, [
-                    _c("h5", { staticClass: "mt-0" }, [_vm._v("Username")]),
-                    _vm._v(
-                      "\n                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur esse animi mollitia ab ducimus possimus placeat aspernatur quaerat, iure debitis perspiciatis. Vel accusamus vitae nulla ipsam possimus perspiciatis fuga autem.\n                        "
-                    )
-                  ])
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-footer" }, [
-              _c("div", { staticClass: "form-group" }, [
-                _c("input", {
-                  staticClass: "form-control",
-                  attrs: { type: "text", name: "", id: "" }
-                })
-              ]),
-              _vm._v(" "),
-              _c("p", { staticClass: "text-muted" }, [
-                _vm._v("Username typing...")
-              ])
-            ])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-md-4" }, [
-          _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-header" }, [_vm._v("Users Online")]),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "card-body bg-secondary",
-                attrs: { id: "user-online" }
-              },
-              [
-                _c("ul", { staticClass: "list-group" }, [
-                  _c("li", { staticClass: "list-group-item" }, [
-                    _vm._v("Username")
-                  ])
-                ])
-              ]
+    return _c(
+      "div",
+      { staticClass: "card-body bg-secondary", attrs: { id: "chat-box" } },
+      [
+        _c("div", { staticClass: "median bg-light rounded" }, [
+          _c("div", { staticClass: "media-body m-2" }, [
+            _c("h5", { staticClass: "mt-0" }, [_vm._v("Username")]),
+            _vm._v(
+              "\n                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur esse animi mollitia ab ducimus possimus placeat aspernatur quaerat, iure debitis perspiciatis. Vel accusamus vitae nulla ipsam possimus perspiciatis fuga autem.\n                        "
             )
           ])
         ])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-4" }, [
+      _c("div", { staticClass: "card" }, [
+        _c("div", { staticClass: "card-header" }, [_vm._v("Users Online")]),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "card-body bg-secondary",
+            attrs: { id: "user-online" }
+          },
+          [
+            _c("ul", { staticClass: "list-group" }, [
+              _c("li", { staticClass: "list-group-item" }, [_vm._v("Username")])
+            ])
+          ]
+        )
       ])
     ])
   }

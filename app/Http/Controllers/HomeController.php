@@ -30,6 +30,11 @@ class HomeController extends Controller
 
     public function sendMessage(Request $request)
     {
-        broadcast(new ChatSent('Message Example'));
+        $message = $request->user()->chats()->create([
+            'message'   => $request->message
+        ]);
+        broadcast(new ChatSent($message->load('user')))->toOthers();
+
+        return ['status'   => 'success'];
     }
 }

@@ -1,5 +1,5 @@
 @extends('layouts.app')
 
 @section('content')
-<chatroom-component></chatroom-component>
+<chatroom-component :user="{{ Auth::user() }}"></chatroom-component>
 @endsection
