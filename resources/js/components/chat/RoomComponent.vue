@@ -41,7 +41,10 @@
 <script>
     export default {
         mounted() {
-            console.log('Component mounted.')
+            Echo.join('chat')
+                .listen('ChatSent', (e) => {
+                    console.log(e);
+                });
         }
     }
 </script>
