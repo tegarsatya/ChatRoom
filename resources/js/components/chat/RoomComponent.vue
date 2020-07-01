@@ -6,10 +6,10 @@
                     <div class="card-header">Chat Room</div>
 
                     <div id="chat-box" class="card-body bg-secondary">
-                        <div class="median bg-light rounded">
+                        <div class="media m-2 bg-light rounded" v-for="(chat, index) in messages" :key="index">
                             <div class="media-body m-2">
-                                <h5 class="mt-0">Username</h5>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur esse animi mollitia ab ducimus possimus placeat aspernatur quaerat, iure debitis perspiciatis. Vel accusamus vitae nulla ipsam possimus perspiciatis fuga autem.
+                                <h5 class="mt-0">{{ chat.user.name }}</h5>
+                                {{ chat.message }}
                             </div>
                         </div>
                     </div>
@@ -52,6 +52,17 @@
         },
 
         methods: {
+            fetchMessage()
+            {
+                axios.get('/fetch')
+                    .then((result) => {
+                        this.messages = result.data;
+                        console.log(result.data);
+                    }).catch((err) => {
+                        console.log(err)
+                    });
+            },
+
             sendMessage() {
                 this.messages.push({
                     user: this.user,
@@ -70,14 +81,35 @@
 
                 this.message = '';
 
+            },
+
+             scrollDown() {
+                let container = document.getElementById('chat-box');
+                let scrollHeight = container.scrollHeight;
+                container.scrollTop = scrollHeight;
             }
         },
 
         mounted() {
+            this.fetchMessage();
+
             Echo.join('chat')
                 .listen('ChatSent', (e) => {
+                    this.messages.push(e.message);
                     console.log(e);
                 });
-        }
+
+                this.scrollDown();
+        },
+            updated() {
+            this.scrollDown();
+        },
     }
 </script>
+
+<style lang="css" scoped>
+    #chat-box {
+        overflow: auto;
+        height: 300px;
+    }
+</style>
